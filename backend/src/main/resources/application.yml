@@ -20,6 +20,25 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 
+# 字典查询第三方接口配置（可用环境变量覆盖）
+dict:
+  client:
+    baseUrl: ${DICT_BASE_URL:http://172.20.4.32:18022/}
+    appKey: ${DICT_APP_KEY:28dc15bb-2e2c-45e4-b435-525853f69173}
+    appSecret: ${DICT_APP_SECRET:0e27fdf2820802cdea8e0eb22b695c93}
+  rest:
+    connectTimeout: ${DICT_CONNECT_TIMEOUT:3000}
+    readTimeout: ${DICT_READ_TIMEOUT:5000}
+  retry:
+    maxAttempts: 3
+    initialDelay: ${DICT_RETRY_INITIAL_DELAY:100}
+    multiplier: ${DICT_RETRY_MULTIPLIER:2.0}
+    maxDelay: ${DICT_RETRY_MAX_DELAY:2000}
+  rateLimit:
+    capacity: ${DICT_RATE_LIMIT_CAPACITY:100}
+    refillTokens: ${DICT_RATE_LIMIT_REFILL_TOKENS:100}
+    refillDuration: ${DICT_RATE_LIMIT_REFILL_DURATION:1s}
+
 management:
   endpoints:
     web:
