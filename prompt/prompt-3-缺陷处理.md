@@ -21,7 +21,7 @@
 3. **修复方案与关键改动**：按文件列出要点
 4. **验证命令与期望结果**：修复前后对比 + `mvn test`
 5. **变更文件清单**
-6. **QA 文档**：新增 `docs/bugfix-sessionregistry-userdirectory-qa.md`（如无 docs 目录则创建），用中文问答写：
+6. **QA 文档**：新增 `docs/bugfix-service-qa.md`（如无 docs 目录则创建），用中文问答写：
    - 问题是什么/影响范围
    - 如何复现（命令）
    - 根因是什么（指向代码）
