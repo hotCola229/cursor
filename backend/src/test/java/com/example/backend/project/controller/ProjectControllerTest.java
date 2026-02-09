@@ -1,6 +1,5 @@
 package com.example.backend.project.controller;
 
-import com.example.backend.project.entity.Project;
 import com.example.backend.project.mapper.ProjectMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,7 +57,9 @@ class ProjectControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(body)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(0));
+                .andExpect(jsonPath("$.code").value(0))
+                .andExpect(jsonPath("$.data.name").value("项目A"))
+                .andExpect(jsonPath("$.data.owner").value("张三"));
     }
 
     @Test
@@ -79,7 +80,7 @@ class ProjectControllerTest {
     @Test
     void getDeletedOrNotExistProject() throws Exception {
         // 插入并逻辑删除
-        Project project = new Project();
+        com.example.backend.project.entity.Project project = new com.example.backend.project.entity.Project();
         project.setName("项目C");
         project.setOwner("王五");
         project.setStatus(com.example.backend.project.enums.ProjectStatus.ACTIVE);
@@ -89,6 +90,31 @@ class ProjectControllerTest {
         mockMvc.perform(get("/api/projects/" + project.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(40401));
+    }
+
+    @Test
+    void pageProjectsWithKeyword() throws Exception {
+        // 插入两条项目数据
+        com.example.backend.project.entity.Project p1 = new com.example.backend.project.entity.Project();
+        p1.setName("关键项目1");
+        p1.setOwner("王一");
+        p1.setStatus(com.example.backend.project.enums.ProjectStatus.ACTIVE);
+        projectMapper.insert(p1);
+
+        com.example.backend.project.entity.Project p2 = new com.example.backend.project.entity.Project();
+        p2.setName("普通项目");
+        p2.setOwner("李二");
+        p2.setStatus(com.example.backend.project.enums.ProjectStatus.ACTIVE);
+        projectMapper.insert(p2);
+
+        mockMvc.perform(get("/api/projects")
+                        .param("page", "1")
+                        .param("size", "10")
+                        .param("keyword", "关键"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(0))
+                .andExpect(jsonPath("$.data.total").value(1))
+                .andExpect(jsonPath("$.data.records[0].name").value("关键项目1"));
     }
 }
 
