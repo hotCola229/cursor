@@ -24,9 +24,9 @@ public class RequestContext {
     }
 
     public void reset() {
-        Map<String, Object> ctx = LOCAL.get();
-        if (ctx != null) {
-            ctx.clear();
-        }
+        // 使用 remove 而不是仅仅清空 Map，确保：
+        // 1. 彻底移除当前线程绑定的上下文，避免在线程池场景下残留；
+        // 2. 释放整个 Map 对象，减少长生命周期线程中的内存占用。
+        LOCAL.remove();
     }
 }
